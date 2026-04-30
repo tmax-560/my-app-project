@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Hello! App is live, you succeeded!hhh🚀');
+ res.send('Hello! Updated automatically! 🔥');
 });
 
 app.listen(3000, () => console.log('Running on port 3000'));
