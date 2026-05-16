@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mouhcine Rouadi — Infrastructure & DevOps Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@200;300;400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --green: #00ff88;
+  --green-dim: #00cc66;
+  --green-dark: #004422;
+  --green-glow: rgba(0,255,136,0.15);
+  --bg: #020c06;
+  --bg2: #050f08;
+  --bg3: #0a1a0f;
+  --panel: #0d1f12;
+  --border: rgba(0,255,136,0.18);
+  --text: #c8e6cc;
+  --text-dim: #5a8a6a;
+  --mono: 'Share Tech Mono', monospace;
+  --head: 'Rajdhani', sans-serif;
+  --body: 'Exo 2', sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--body);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ── CUSTOM CURSOR ── */
+#cursor{
+  position:fixed;width:10px;height:10px;
+  background:var(--green);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s;
+  box-shadow:0 0 12px var(--green);
+}
+#cursor-ring{
+  position:fixed;width:32px;height:32px;
+  border:1px solid var(--green-dim);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:all 0.15s ease;
+  opacity:0.6;
+}
+
+/* ── SCANLINES ── */
+body::before{
+  content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,0.015) 2px,rgba(0,255,136,0.015) 4px);
+  pointer-events:none;z-index:1;
+}
+
+/* ── GRID BG ── */
+body::after{
+  content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+  background-image:
+    linear-gradient(rgba(0,255,136,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,136,0.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;z-index:0;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 48px;
+  background:rgba(2,12,6,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:var(--mono);
+  color:var(--green);
+  font-size:1rem;
+  letter-spacing:2px;
+}
+.nav-logo span{color:var(--text-dim);}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{
+  font-family:var(--mono);font-size:0.75rem;
+  color:var(--text-dim);text-decoration:none;
+  letter-spacing:2px;text-transform:uppercase;
+  transition:color 0.2s;
+  position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;
+  background:var(--green);transition:width 0.3s;
+}
+.nav-links a:hover{color:var(--green);}
+.nav-links a:hover::after{width:100%;}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:0 48px;
+  position:relative;z-index:2;
+}
+.hero-inner{max-width:900px;}
+.hero-tag{
+  font-family:var(--mono);font-size:0.75rem;
+  color:var(--green);letter-spacing:4px;
+  margin-bottom:24px;
+  display:flex;align-items:center;gap:12px;
+}
+.hero-tag::before{
+  content:'';width:40px;height:1px;background:var(--green);
+}
+.hero-name{
+  font-family:var(--head);
+  font-size:clamp(3rem,8vw,7rem);
+  font-weight:700;line-height:0.9;
+  color:#fff;
+  letter-spacing:-2px;
+  margin-bottom:16px;
+}
+.hero-name span{
+  color:transparent;
+  -webkit-text-stroke:1px var(--green);
+}
+.hero-title{
+  font-family:var(--mono);
+  font-size:clamp(0.85rem,2vw,1.1rem);
+  color:var(--green-dim);
+  margin-bottom:32px;
+  min-height:1.6em;
+}
+.hero-bio{
+  font-family:var(--body);font-weight:300;
+  font-size:1.05rem;line-height:1.8;
+  color:var(--text-dim);
+  max-width:600px;
+  margin-bottom:48px;
+  border-left:2px solid var(--green);
+  padding-left:20px;
+}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;}
+.btn{
+  font-family:var(--mono);font-size:0.75rem;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:14px 28px;text-decoration:none;
+  transition:all 0.3s;display:inline-block;
+  position:relative;overflow:hidden;
+}
+.btn-primary{
+  background:var(--green);color:#000;
+  clip-path:polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px);
+}
+.btn-primary:hover{background:#fff;transform:translateY(-2px);}
+.btn-outline{
+  border:1px solid var(--green);color:var(--green);
+  clip-path:polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px);
+}
+.btn-outline:hover{background:var(--green-glow);transform:translateY(-2px);}
+
+.hero-stats{
+  display:flex;gap:48px;margin-top:64px;
+  flex-wrap:wrap;
+}
+.stat{border-left:2px solid var(--green);padding-left:16px;}
+.stat-num{
+  font-family:var(--head);font-size:2.5rem;font-weight:700;
+  color:var(--green);line-height:1;
+}
+.stat-label{
+  font-family:var(--mono);font-size:0.65rem;
+  color:var(--text-dim);letter-spacing:2px;
+  text-transform:uppercase;margin-top:4px;
+}
+
+/* ── SECTION BASE ── */
+section{
+  position:relative;z-index:2;
+  padding:100px 48px;
+  max-width:1100px;margin:0 auto;
+}
+.sec-header{margin-bottom:64px;}
+.sec-tag{
+  font-family:var(--mono);font-size:0.7rem;
+  color:var(--green);letter-spacing:4px;
+  text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:12px;
+}
+.sec-tag::before{content:'//'; color:var(--text-dim);}
+.sec-title{
+  font-family:var(--head);font-size:clamp(2rem,4vw,3.5rem);
+  font-weight:700;color:#fff;letter-spacing:-1px;
+  line-height:1;
+}
+.sec-title span{color:var(--green);}
+.sec-line{
+  width:60px;height:2px;background:var(--green);
+  margin-top:20px;
+}
+
+/* ── SKILLS ── */
+.skills-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:24px;
+}
+.skill-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:28px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color 0.3s,transform 0.3s;
+  clip-path:polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0% 100%,0% 12px);
+}
+.skill-card:hover{
+  border-color:var(--green);
+  transform:translateY(-4px);
+}
+.skill-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.skill-card:hover::before{opacity:1;}
+.skill-cat{
+  font-family:var(--mono);font-size:0.65rem;
+  color:var(--green);letter-spacing:3px;
+  text-transform:uppercase;margin-bottom:16px;
+}
+.skill-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.tag{
+  font-family:var(--mono);font-size:0.65rem;
+  padding:4px 10px;
+  border:1px solid var(--border);
+  color:var(--text-dim);
+  letter-spacing:1px;
+  transition:all 0.2s;
+}
+.tag:hover{border-color:var(--green);color:var(--green);}
+
+/* ── EXPERIENCE ── */
+.timeline{position:relative;padding-left:32px;}
+.timeline::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:1px;background:linear-gradient(180deg,var(--green),transparent);
+}
+.exp-item{
+  position:relative;margin-bottom:56px;
+  opacity:0;transform:translateX(-20px);
+  transition:all 0.6s ease;
+}
+.exp-item.visible{opacity:1;transform:translateX(0);}
+.exp-item::before{
+  content:'';position:absolute;left:-36px;top:6px;
+  width:10px;height:10px;
+  border:1px solid var(--green);
+  background:var(--bg);
+  transform:rotate(45deg);
+}
+.exp-item::after{
+  content:'';position:absolute;left:-32px;top:10px;
+  width:2px;height:2px;background:var(--green);
+}
+.exp-date{
+  font-family:var(--mono);font-size:0.65rem;
+  color:var(--green);letter-spacing:2px;
+  margin-bottom:8px;
+}
+.exp-role{
+  font-family:var(--head);font-size:1.4rem;font-weight:600;
+  color:#fff;margin-bottom:4px;
+}
+.exp-company{
+  font-family:var(--mono);font-size:0.75rem;
+  color:var(--text-dim);margin-bottom:16px;
+  letter-spacing:1px;
+}
+.exp-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.exp-list li{
+  font-size:0.9rem;color:var(--text-dim);
+  padding-left:16px;position:relative;line-height:1.6;
+}
+.exp-list li::before{
+  content:'›';position:absolute;left:0;
+  color:var(--green);font-weight:bold;
+}
+
+/* ── PROJECTS ── */
+.projects-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:24px;
+}
+.proj-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:32px;
+  transition:all 0.3s;
+  clip-path:polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0% 100%,0% 12px);
+  position:relative;overflow:hidden;
+}
+.proj-card:hover{border-color:var(--green);transform:translateY(-6px);}
+.proj-card::after{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.proj-card:hover::after{opacity:1;}
+.proj-type{
+  font-family:var(--mono);font-size:0.6rem;
+  color:var(--green);letter-spacing:3px;
+  text-transform:uppercase;margin-bottom:12px;
+}
+.proj-title{
+  font-family:var(--head);font-size:1.3rem;font-weight:600;
+  color:#fff;margin-bottom:12px;
+}
+.proj-desc{
+  font-size:0.88rem;color:var(--text-dim);
+  line-height:1.7;margin-bottom:20px;
+}
+.proj-stack{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;}
+.stack-tag{
+  font-family:var(--mono);font-size:0.6rem;
+  padding:3px 8px;
+  background:var(--green-dark);
+  color:var(--green);
+  letter-spacing:1px;
+}
+.proj-link{
+  font-family:var(--mono);font-size:0.65rem;
+  color:var(--green);text-decoration:none;
+  letter-spacing:2px;text-transform:uppercase;
+  display:flex;align-items:center;gap:8px;
+  transition:gap 0.2s;
+}
+.proj-link:hover{gap:14px;}
+
+/* ── CERTIFICATIONS ── */
+.certs-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:16px;
+}
+.cert-item{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:20px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  transition:all 0.3s;
+}
+.cert-item:hover{border-color:var(--green);}
+.cert-icon{
+  font-family:var(--mono);font-size:1.2rem;
+  color:var(--green);flex-shrink:0;
+  margin-top:2px;
+}
+.cert-name{
+  font-family:var(--body);font-weight:600;
+  font-size:0.88rem;color:#fff;margin-bottom:4px;
+}
+.cert-org{
+  font-family:var(--mono);font-size:0.65rem;
+  color:var(--text-dim);letter-spacing:1px;
+}
+.cert-status{
+  font-family:var(--mono);font-size:0.6rem;
+  color:var(--green);margin-top:6px;letter-spacing:1px;
+}
+
+/* ── CONTACT ── */
+.contact-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;
+}
+.contact-info{display:flex;flex-direction:column;gap:20px;}
+.contact-item{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  transition:border-color 0.3s;
+}
+.contact-item:hover{border-color:var(--green);}
+.contact-label{
+  font-family:var(--mono);font-size:0.65rem;
+  color:var(--text-dim);letter-spacing:2px;
+  text-transform:uppercase;display:block;margin-bottom:4px;
+}
+.contact-val{
+  font-family:var(--body);font-size:0.9rem;color:#fff;
+}
+.contact-form{display:flex;flex-direction:column;gap:16px;}
+.form-field{
+  display:flex;flex-direction:column;gap:6px;
+}
+.form-label{
+  font-family:var(--mono);font-size:0.65rem;
+  color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;
+}
+.form-input,
+.form-textarea{
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--text);
+  font-family:var(--mono);font-size:0.85rem;
+  padding:12px 16px;outline:none;
+  transition:border-color 0.3s;
+  resize:none;
+}
+.form-input:focus,
+.form-textarea:focus{border-color:var(--green);}
+.form-textarea{min-height:120px;}
+.form-btn{
+  font-family:var(--mono);font-size:0.75rem;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:14px;background:var(--green);
+  color:#000;border:none;cursor:none;
+  transition:all 0.3s;font-weight:bold;
+}
+.form-btn:hover{background:#fff;}
+
+/* ── FOOTER ── */
+footer{
+  position:relative;z-index:2;
+  border-top:1px solid var(--border);
+  padding:32px 48px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-text{
+  font-family:var(--mono);font-size:0.65rem;
+  color:var(--text-dim);letter-spacing:2px;
+}
+.footer-text span{color:var(--green);}
+
+/* ── TERMINAL WIDGET ── */
+.terminal{
+  background:#000;border:1px solid var(--green);
+  padding:20px;margin-top:32px;
+  font-family:var(--mono);font-size:0.75rem;
+  max-width:520px;
+}
+.terminal-bar{
+  display:flex;gap:6px;margin-bottom:14px;
+  padding-bottom:10px;border-bottom:1px solid var(--border);
+}
+.t-dot{width:10px;height:10px;border-radius:50%;}
+.t-red{background:#ff5555;}
+.t-yellow{background:#ffaa00;}
+.t-green{background:var(--green);}
+.terminal-line{color:var(--text-dim);margin-bottom:4px;}
+.terminal-line .prompt{color:var(--green);}
+.terminal-line .cmd{color:#fff;}
+.terminal-line .out{color:var(--text-dim);}
+.blink{animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes glitch{
+  0%,100%{text-shadow:2px 0 var(--green),-2px 0 #ff0055;}
+  25%{text-shadow:-2px 0 var(--green),2px 0 #ff0055;}
+  50%{text-shadow:2px 2px var(--green),-2px -2px #ff0055;}
+}
+.hero-name{animation:fadeInUp 0.8s ease both;}
+.hero-title{animation:fadeInUp 0.8s 0.2s ease both;}
+.hero-bio{animation:fadeInUp 0.8s 0.4s ease both;}
+.hero-btns{animation:fadeInUp 0.8s 0.6s ease both;}
+.hero-stats{animation:fadeInUp 0.8s 0.8s ease both;}
+
+@media(max-width:768px){
+  nav{padding:14px 20px;}
+  .nav-links{display:none;}
+  section{padding:80px 20px;}
+  #hero{padding:0 20px;}
+  .contact-grid{grid-template-columns:1fr;}
+  footer{padding:24px 20px;}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">MR<span>_</span>ROUADI</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="padding-top:100px;max-width:100%;">
+  <div class="hero-inner">
+    <div class="hero-tag">Available for opportunities</div>
+    <h1 class="hero-name">Mouhcine<br/><span>Rouadi</span></h1>
+    <div class="hero-title" id="typed-title"></div>
+    <p class="hero-bio">
+      IT Infrastructure & Operations specialist with 2+ years at DXC Technology on Orange Morocco's critical telecom billing platforms. Experienced in 24/7 production support, incident management (P1/P2/P3), system monitoring, and automation scripting. Currently pursuing a Master's in Cybersecurity with a growing focus on DevOps and cloud infrastructure.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="#contact" class="btn btn-outline">Get In Touch</a>
+    </div>
+    <div class="terminal" style="margin-top:48px;">
+      <div class="terminal-bar">
+        <div class="t-dot t-red"></div>
+        <div class="t-dot t-yellow"></div>
+        <div class="t-dot t-green"></div>
+      </div>
+      <div class="terminal-line"><span class="prompt">mouci@ops:~$</span> <span class="cmd">whoami</span></div>
+      <div class="terminal-line"><span class="out">Infrastructure & DevOps Engineer — Casablanca, Morocco</span></div>
+      <div class="terminal-line" style="margin-top:8px;"><span class="prompt">mouci@ops:~$</span> <span class="cmd">uptime</span></div>
+      <div class="terminal-line"><span class="out">2+ years in production · 24/7 ops · 0 unresolved P1s</span></div>
+      <div class="terminal-line" style="margin-top:8px;"><span class="prompt">mouci@ops:~$</span> <span class="blink">█</span></div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">2+</div><div class="stat-label">Years experience</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Platforms supported</div></div>
+      <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Production support</div></div>
+      <div class="stat"><div class="stat-num">4+</div><div class="stat-label">Certifications</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="sec-header">
+    <div class="sec-tag">Technical profile</div>
+    <h2 class="sec-title">Skills &amp; <span>Expertise</span></h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-cat">Infrastructure & Operations</div>
+      <div class="skill-tags">
+        <span class="tag">BSCS</span><span class="tag">SIRIO</span><span class="tag">DWH</span>
+        <span class="tag">ETL</span><span class="tag">SAP</span><span class="tag">Billing systems</span>
+        <span class="tag">P1/P2/P3</span><span class="tag">RCA</span><span class="tag">SLA</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">Monitoring & Observability</div>
+      <div class="skill-tags">
+        <span class="tag">Nagios</span><span class="tag">Grafana</span><span class="tag">SolarWinds</span>
+        <span class="tag">Kapptivate</span><span class="tag">Alerting</span><span class="tag">Linux logs</span>
+        <span class="tag">Incident analysis</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">Scripting & Automation</div>
+      <div class="skill-tags">
+        <span class="tag">Python</span><span class="tag">Bash</span><span class="tag">Shell</span>
+        <span class="tag">Node.js</span><span class="tag">CI/CD</span><span class="tag">deploy.py</span>
+        <span class="tag">GitHub API</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">Cloud & Containers</div>
+      <div class="skill-tags">
+        <span class="tag">AWS EC2</span><span class="tag">AWS S3</span><span class="tag">IAM</span>
+        <span class="tag">Azure VMs</span><span class="tag">Entra ID</span><span class="tag">Docker</span>
+        <span class="tag">Docker Hub</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">Security</div>
+      <div class="skill-tags">
+        <span class="tag">Wireshark</span><span class="tag">Fortinet</span><span class="tag">VPN</span>
+        <span class="tag">SIEM</span><span class="tag">SQLi</span><span class="tag">XSS</span>
+        <span class="tag">MITM</span><span class="tag">Privilege escalation</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-cat">Networking & Systems</div>
+      <div class="skill-tags">
+        <span class="tag">Linux</span><span class="tag">Active Directory</span><span class="tag">CCNA</span>
+        <span class="tag">Veeam Backup</span><span class="tag">RFID</span><span class="tag">NVR</span>
+        <span class="tag">Git</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="sec-header">
+    <div class="sec-tag">Career history</div>
+    <h2 class="sec-title">Work <span>Experience</span></h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="timeline">
+    <div class="exp-item">
+      <div class="exp-date">JAN 2023 — PRESENT</div>
+      <div class="exp-role">Infrastructure & Operations Specialist</div>
+      <div class="exp-company">DXC Technology — Orange Morocco | Casablanca</div>
+      <ul class="exp-list">
+        <li>24/7 production support for critical telecom platforms: Billing, Payment, Orange Money, Recharges, Orange et Moi</li>
+        <li>Managed billing cycles (B2B, B2C, FIXE) in BSCS including FAB file generation, validation, and financial reconciliations (MCA/GAB)</li>
+        <li>Validated billing data via SIRIO, analyzing discrepancies to ensure data reliability and revenue integrity</li>
+        <li>Piloted ETL flows and batch processing within the Data Warehouse (DWH)</li>
+        <li>Monitored systems and managed incidents via Nagios, Grafana, SolarWinds and Kapptivate with full RCA</li>
+        <li>Executed Shell/Python scripts for reporting, FAB file processing and reconciliation automation</li>
+      </ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">AUG 2022 — DEC 2022</div>
+      <div class="exp-role">IT & Security Intern</div>
+      <div class="exp-company">IS-TECH | Casablanca</div>
+      <ul class="exp-list">
+        <li>Deployed RFID access control systems and video surveillance infrastructure</li>
+        <li>Configured NVR with secure remote access</li>
+        <li>Participated in security audits, system hardening, and technical documentation</li>
+      </ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">NOV 2021 — MAY 2022</div>
+      <div class="exp-role">IT Help Desk Technician</div>
+      <div class="exp-company">IT And Supply | Casablanca</div>
+      <ul class="exp-list">
+        <li>Administered Fortinet firewalls, VPN, and Active Directory environments</li>
+        <li>Provided Level 1 & 2 user support and incident resolution</li>
+        <li>Implemented backup and recovery solutions with Veeam Backup & Replication</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="sec-header">
+    <div class="sec-tag">Built from scratch</div>
+    <h2 class="sec-title">Projects &amp; <span>Labs</span></h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="projects-grid">
+    <div class="proj-card">
+      <div class="proj-type">DevOps · Automation</div>
+      <div class="proj-title">Auto-Deployment Pipeline</div>
+      <div class="proj-desc">Built a CI/CD pipeline from scratch using Python and Node.js. A Python script polls the GitHub API every 30 seconds, detects new commits via SHA comparison, and automatically pulls code, installs dependencies, and restarts the application — zero manual steps required.</div>
+      <div class="proj-stack">
+        <span class="stack-tag">Python</span><span class="stack-tag">Node.js</span>
+        <span class="stack-tag">Docker</span><span class="stack-tag">GitHub API</span>
+        <span class="stack-tag">Docker Hub</span><span class="stack-tag">Express</span>
+      </div>
+      <a href="https://github.com/tmax-560/my-app-project" target="_blank" class="proj-link">View on GitHub →</a>
+    </div>
+    <div class="proj-card">
+      <div class="proj-type">Security · Penetration Testing</div>
+      <div class="proj-title">Hack The Box Labs</div>
+      <div class="proj-desc">Practical cybersecurity labs covering application and network security testing including SQL injection, XSS, MITM attacks, brute force, privilege escalation in controlled environments, system enumeration, vulnerability analysis, and network traffic investigation with Wireshark.</div>
+      <div class="proj-stack">
+        <span class="stack-tag">Wireshark</span><span class="stack-tag">SQLi</span>
+        <span class="stack-tag">XSS</span><span class="stack-tag">MITM</span>
+        <span class="stack-tag">Linux</span><span class="stack-tag">Privilege Escalation</span>
+      </div>
+      <a href="#" class="proj-link">Hack The Box Profile →</a>
+    </div>
+    <div class="proj-card">
+      <div class="proj-type">Web · Infrastructure</div>
+      <div class="proj-title">Car Rental WordPress Site</div>
+      <div class="proj-desc">Deployed and administered a WordPress car rental website on Hostinger. Managed full lifecycle including backups, restorations, updates, performance optimization, and service availability monitoring.</div>
+      <div class="proj-stack">
+        <span class="stack-tag">WordPress</span><span class="stack-tag">Hostinger</span>
+        <span class="stack-tag">Backup</span><span class="stack-tag">DNS</span>
+      </div>
+      <a href="#" class="proj-link">View Project →</a>
+    </div>
+    <div class="proj-card">
+      <div class="proj-type">Linux · Administration</div>
+      <div class="proj-title">Server Administration Labs</div>
+      <div class="proj-desc">Hands-on Linux server administration using Webmin and Cockpit for service supervision, user management, system monitoring, and maintenance. Covers practical skills aligned with Red Hat RH124 certification.</div>
+      <div class="proj-stack">
+        <span class="stack-tag">Linux</span><span class="stack-tag">Webmin</span>
+        <span class="stack-tag">Cockpit</span><span class="stack-tag">RedHat</span>
+        <span class="stack-tag">systemd</span>
+      </div>
+      <a href="#" class="proj-link">View Details →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="sec-header">
+    <div class="sec-tag">Credentials</div>
+    <h2 class="sec-title">Certifi<span>cations</span></h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="certs-grid">
+    <div class="cert-item">
+      <div class="cert-icon">☁</div>
+      <div>
+        <div class="cert-name">AWS Cloud Practitioner Essentials</div>
+        <div class="cert-org">Amazon Web Services</div>
+        <div class="cert-status">✓ COMPLETED</div>
+      </div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">☁</div>
+      <div>
+        <div class="cert-name">AWS Solutions Architect</div>
+        <div class="cert-org">Amazon Web Services</div>
+        <div class="cert-status">⟳ IN PROGRESS</div>
+      </div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">◈</div>
+      <div>
+        <div class="cert-name">Red Hat System Administration I (RH124)</div>
+        <div class="cert-org">Red Hat</div>
+        <div class="cert-status">✓ COMPLETED</div>
+      </div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">◉</div>
+      <div>
+        <div class="cert-name">CCNA Routing & Switching</div>
+        <div class="cert-org">Cisco (Academic)</div>
+        <div class="cert-status">✓ COMPLETED</div>
+      </div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">◈</div>
+      <div>
+        <div class="cert-name">Information Security Awareness Training</div>
+        <div class="cert-org">DXC Technology</div>
+        <div class="cert-status">✓ COMPLETED</div>
+      </div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon">◎</div>
+      <div>
+        <div class="cert-name">IELTS</div>
+        <div class="cert-org">British Council</div>
+        <div class="cert-status">⟳ IN PROGRESS — TARGET C2</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sec-header">
+    <div class="sec-tag">Get in touch</div>
+    <h2 class="sec-title">Contact <span>Me</span></h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p style="font-size:0.95rem;color:var(--text-dim);line-height:1.8;margin-bottom:8px;">
+        Open to DevOps, Cloud, and Infrastructure roles. Feel free to reach out for opportunities, collaborations, or just a conversation about tech.
+      </p>
+      <div class="contact-item">
+        <div>
+          <span class="contact-label">Email</span>
+          <span class="contact-val">mouhcinerouadi@gmail.com</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div>
+          <span class="contact-label">Phone</span>
+          <span class="contact-val">+212 619 852 817</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div>
+          <span class="contact-label">Location</span>
+          <span class="contact-val">Casablanca, Morocco</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div>
+          <span class="contact-label">LinkedIn</span>
+          <span class="contact-val">linkedin.com/in/rouadi-mouhcine-19315018b</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div>
+          <span class="contact-label">GitHub</span>
+          <span class="contact-val">github.com/tmax-560</span>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="handleForm(event)">
+      <div class="form-field">
+        <label class="form-label">Name</label>
+        <input class="form-input" type="text" placeholder="Your name" required/>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="your@email.com" required/>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" placeholder="Your message..." required></textarea>
+      </div>
+      <button class="form-btn" type="submit">Send Message →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-text">© 2025 <span>Mouhcine Rouadi</span> — Built & deployed with custom CI/CD pipeline</div>
+  <div class="footer-text"><span>MR</span>_ROUADI · Casablanca, Morocco</div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  }, 80);
+});
+document.querySelectorAll('a,button,.skill-card,.proj-card,.cert-item,.contact-item').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
+    ring.style.borderColor = 'var(--green)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.borderColor = 'var(--green-dim)';
+  });
+});
+
+// Typed title effect
+const titles = [
+  'Infrastructure & Operations Engineer_',
+  'DevOps Engineer in progress_',
+  'Production Support Specialist_',
+  'Cybersecurity Enthusiast_'
+];
+let ti = 0, ci = 0, del = false;
+const el = document.getElementById('typed-title');
+function type() {
+  const t = titles[ti];
+  if (!del) {
+    el.textContent = t.slice(0, ++ci);
+    if (ci === t.length) { del = true; setTimeout(type, 1800); return; }
+  } else {
+    el.textContent = t.slice(0, --ci);
+    if (ci === 0) { del = false; ti = (ti + 1) % titles.length; }
+  }
+  setTimeout(type, del ? 40 : 70);
+}
+type();
+
+// Scroll animations
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.exp-item').forEach(el => observer.observe(el));
+
+// Form handler
+function handleForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.form-btn');
+  btn.textContent = 'Message Sent ✓';
+  btn.style.background = 'var(--green-dark)';
+  btn.style.color = 'var(--green)';
+  btn.style.border = '1px solid var(--green)';
+  setTimeout(() => {
+    btn.textContent = 'Send Message →';
+    btn.style.background = 'var(--green)';
+    btn.style.color = '#000';
+    btn.style.border = 'none';
+    e.target.reset();
+  }, 3000);
+}
+</script>
+</body>
+</html>
